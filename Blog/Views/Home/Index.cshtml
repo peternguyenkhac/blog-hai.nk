@@ -1,0 +1,55 @@
+﻿@model List<Post>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="card mb-3">
+    <div class="card-header">
+        Search Blog
+    </div>
+    <div class="card-body">
+        <form class="flex-column text-center">
+            <div class="mb-3 d-flex flex-row align-items-center gap-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" name="searchString" class="form-control" id="title" placeholder="Search" value="@ViewBag.SearchString" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        List Blog
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Tin</th>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Vị trí</th>
+                    <th scope="col">Ngày public</th>
+                    <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <th>@item.Id</th>
+                        <td>@item.Title</td>
+                        <td>@item.Category</td>
+                        <td>@Html.Raw(String.Join(',', item.Position))</td>
+                        <td>@item.PublishDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a type="button" href="/EditPost/@item.Id" class="btn btn-outline-primary">Edit</a>
+                            <a type="button" href="/DeletePost/@item.Id" class="btn btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
