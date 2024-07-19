@@ -7,18 +7,23 @@
         New Blog
     </div>
     <div class="card-body">
-        <form id="createPost" method="post" action="CreatePost" enctype="multipart/form-data">
+        <form id="postForm" method="post" action="CreatePost" enctype="multipart/form-data">
             <div class="form-group mb-3">
                 <label for="title">Tiêu đề</label>
-                <input type="text" class="form-control" id="title" name="title">
+                <input type="text" class="form-control" id="title" asp-for="Title">
+                <span class="text-danger" asp-validation-for="Title"></span>
             </div>
             <div class="form-group mb-3">
                 <label for="description">Mô tả</label>
-                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                <textarea class="form-control" id="description" asp-for="Description" rows="3"></textarea>
+                <span class="text-danger" asp-validation-for="Description"></span>
+
             </div>
             <div class="form-group mb-3">
                 <label for="content">Chi tiết</label>
-                <textarea class="form-control" id="content" name="content" rows="5"></textarea>
+                <textarea class="form-control" id="content" asp-for="Content" rows="5"></textarea>
+                <span class="text-danger" asp-validation-for="Content"></span>
+
             </div>
             <div class="form-group mb-3">
                 <label for="formFile" class="form-label">Hình ảnh</label>
@@ -29,7 +34,7 @@
                 @foreach (var item in ViewBag.Positions)
                 {
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="p@(item)" name="position" value="@item">
+                        <input class="form-check-input" type="checkbox" id="p@(item)" name="Position" value="@item" checked="@(Model?.Position.Contains((string)item)??false)">
                         <label class="form-check-label" for="pVietNam">@item</label>
                     </div>
                 }
@@ -37,30 +42,35 @@
             <div class="form-group mb-3">
                 <label class="form-label">Public</label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="isPublic" id="public" value="true">
+                    <input class="form-check-input" type="radio" asp-for="IsPublic" id="public" value="true" checked="@(Model?.IsPublic ?? true)">
                     <label class="form-check-label" for="public">Yes</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="isPublic" id="public2" value="false">
+                    <input class="form-check-input" type="radio" asp-for="IsPublic" id="public2" value="false" checked="@((!Model?.IsPublic) ?? false)">
                     <label class="form-check-label" for="public2">No</label>
                 </div>
+                <span class="text-danger" asp-validation-for="IsPublic"></span>
+
             </div>
             <div class="row mb-3">
 
                 <div class="form-group col-md-6">
                     <label for="category">Loại</label>
                     @Html.DropDownListFor(m => m.Category, (SelectList)ViewBag.Categories, new { @class = "form-select", @id="category" })
+                    <span class="text-danger" asp-validation-for="Category"></span>
 
                 </div>
                 <div class="form-group col-md-6">
                     <label for="publishDate">Ngày public</label>
-                    <input type="date" class="form-control" id="publishDate" name="publishDate">
+                    <input type="date" class="form-control" id="publishDate" asp-for="PublishDate">
+                    <span class="text-danger" asp-validation-for="PublishDate"></span>
+
                 </div>
             </div>
         </form>
     </div>
     <div class="card-footer text-center">
-        <button form="createPost" type="submit" class="btn btn-success">Submit</button>
-        <button type="button" class="btn btn-primary">Clear</button>
+        <button form="postForm" type="submit" class="btn btn-success">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="clearPostForm()">Clear</button>
     </div>
 </div>

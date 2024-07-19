@@ -7,18 +7,24 @@
         New Blog
     </div>
     <div class="card-body">
-        <form id="editPost" method="post" enctype="multipart/form-data">
+        <form id="postForm" method="post" enctype="multipart/form-data">
             <div class="form-group mb-3">
                 <label for="title">Tiêu đề</label>
                 <input type="text" class="form-control" id="title" name="title" value="@Model.Title">
+                <span class="text-danger" asp-validation-for="Title"></span>
+
             </div>
             <div class="form-group mb-3">
                 <label for="description">Mô tả</label>
                 <textarea class="form-control" id="description" name="description" rows="3">@Model.Description</textarea>
+                <span class="text-danger" asp-validation-for="Description"></span>
+
             </div>
             <div class="form-group mb-3">
                 <label for="content">Chi tiết</label>
                 <textarea class="form-control" id="content" name="content" rows="5">@Model.Content</textarea>
+                <span class="text-danger" asp-validation-for="Content"></span>
+
             </div>
             <div class="form-group mb-3">
                 <label for="formFile" class="form-label">Hình ảnh</label>
@@ -46,21 +52,27 @@
                     <input class="form-check-input" type="radio" name="isPublic" id="public2" value="false" @(!Model.IsPublic ? "checked" : "")>
                     <label class="form-check-label" for="public2">No</label>
                 </div>
+                <span class="text-danger" asp-validation-for="IsPublic"></span>
+
             </div>
             <div class="row mb-3">
                 <div class="form-group col-md-6">
                     <label for="category">Loại</label>
                     @Html.DropDownListFor(m => m.Category, (SelectList)ViewBag.Categories, new { @class = "form-select", @id = "category" })
+                    <span class="text-danger" asp-validation-for="Category"></span>
+
                 </div>
                 <div class="form-group col-md-6">
                     <label for="publishDate">Ngày public</label>
                     <input type="date" class="form-control" id="publishDate" name="publishDate" asp-for="PublishDate">
+                    <span class="text-danger" asp-validation-for="PublishDate"></span>
+
                 </div>
             </div>
         </form>
     </div>
     <div class="card-footer text-center">
-        <button form="editPost" type="submit" class="btn btn-success">Submit</button>
-        <button type="button" class="btn btn-primary">Clear</button>
+        <button form="postForm" type="submit" class="btn btn-success">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="clearPostForm()">Clear</button>
     </div>
 </div>

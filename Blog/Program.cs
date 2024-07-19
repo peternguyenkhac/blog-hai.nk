@@ -1,4 +1,6 @@
 using Blog.Data;
+using Blog.Validation;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog
@@ -15,6 +17,9 @@ namespace Blog
             // Add db context
             builder.Services.AddDbContext<BlogContext>(options => 
             options.UseSqlServer(builder.Configuration.GetConnectionString("Blog")));
+
+            // Add fluent validation
+            builder.Services.AddValidatorsFromAssemblyContaining<PostValidator>();
 
             var app = builder.Build();
 

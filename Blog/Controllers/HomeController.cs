@@ -1,8 +1,13 @@
 ﻿using Blog.Data;
 using Blog.Models;
+using Blog.Utils;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Diagnostics;
 
 namespace Blog.Controllers
@@ -10,12 +15,14 @@ namespace Blog.Controllers
     public class HomeController : Controller
     {
         private readonly BlogContext _blogContext;
+        private IValidator<Post> _postValidator;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(BlogContext blogContext, IWebHostEnvironment webHostEnvironment)
+        public HomeController(BlogContext blogContext, IWebHostEnvironment webHostEnvironment, IValidator<Post> postValidator)
         {
             _blogContext = blogContext;
             _webHostEnvironment = webHostEnvironment;
+            _postValidator = postValidator;
         }
 
         public async Task<IActionResult> Index(string searchString = "")
@@ -41,6 +48,13 @@ namespace Blog.Controllers
         [Route("CreatePost")]
         public async Task<IActionResult> CreatePost(Post post, IFormFile imageUpload)
         {
+            ValidationResult result = await _postValidator.ValidateAsync(post);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                BuildOptions();
+                return View(post);
+            }
             string urlImage = "";
             if(imageUpload != null)
             {
@@ -78,6 +92,13 @@ namespace Blog.Controllers
         [Route("EditPost/{id}")]
         public async Task<IActionResult> EditPost(int id, Post updatedPost, IFormFile imageUpload)
         {
+            ValidationResult result = await _postValidator.ValidateAsync(updatedPost);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(ModelState);
+                BuildOptions();
+                return View(updatedPost);
+            }
             string urlImage = "";
             if (imageUpload != null)
             {

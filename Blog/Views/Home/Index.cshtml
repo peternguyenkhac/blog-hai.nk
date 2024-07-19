@@ -42,10 +42,10 @@
                         <td>@item.Title</td>
                         <td>@item.Category</td>
                         <td>@Html.Raw(String.Join(',', item.Position))</td>
-                        <td>@item.PublishDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.PublishDate?.ToString("dd/MM/yyyy")</td>
                         <td>
                             <a type="button" href="/EditPost/@item.Id" class="btn btn-outline-primary">Edit</a>
-                            <a type="button" href="/DeletePost/@item.Id" class="btn btn-outline-danger">Delete</a>
+                            <a type="button" href="/DeletePost/@item.Id" class="btn btn-outline-danger" onclick="return confirm('Bạn có muốn xoá?')">Delete</a>
                         </td>
                     </tr>
                 }
